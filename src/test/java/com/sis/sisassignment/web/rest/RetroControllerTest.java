@@ -2,6 +2,7 @@ package com.sis.sisassignment.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sis.sisassignment.RetroMockDataFactory;
+import com.sis.sisassignment.domain.model.FeedbackItem;
 import com.sis.sisassignment.domain.model.Retrospective;
 import com.sis.sisassignment.domain.service.RetroService;
 import org.junit.jupiter.api.Test;
@@ -57,5 +58,27 @@ public class RetroControllerTest {
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(retro)))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testPostFeedback() throws Exception {
+        FeedbackItem feedbackItem = RetroMockDataFactory.getBarFeedback();
+        String retroName = "Retrospective 123";
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/retro/feedback")
+                        .param("retroName", retroName)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(feedbackItem)))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testPostFeedback400WithoutRetroName() throws Exception {
+        FeedbackItem feedbackItem = RetroMockDataFactory.getBarFeedback();
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/retro/feedback")
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(feedbackItem)))
+                .andExpect(status().isBadRequest());
     }
 }
