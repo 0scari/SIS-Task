@@ -1,10 +1,9 @@
 package com.sis.sisassignment.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sis.sisassignment.RetroMockFactory;
+import com.sis.sisassignment.RetroMockDataFactory;
 import com.sis.sisassignment.domain.model.Retrospective;
 import com.sis.sisassignment.domain.service.RetroService;
-import com.sis.sisassignment.persistence.repository.RetroRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -43,19 +42,19 @@ public class RetroControllerTest {
         doNothing().when(service).save(any());
 
         mockMvc.perform(MockMvcRequestBuilders.post(URL)
-                        .contentType("application/json")
+                        .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(retro)))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void testPost201() throws Exception {
-        Retrospective retro = RetroMockFactory.getDefaultRetro();
+        Retrospective retro = RetroMockDataFactory.getDefaultRetro();
 
         doNothing().when(service).save(any(Retrospective.class));
 
         mockMvc.perform(MockMvcRequestBuilders.post(URL)
-                        .contentType("application/json")
+                        .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(retro)))
                 .andExpect(status().isCreated());
     }

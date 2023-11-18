@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
 @RequestMapping("/api/retro")
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class RetroController {
 
     private final RetroService retroService;
 
-    @PostMapping("/")
+    @PostMapping(value = "/", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> post(@RequestBody @Valid Retrospective retro) {
         this.retroService.save(retro);
         return new ResponseEntity<>(HttpStatus.CREATED);

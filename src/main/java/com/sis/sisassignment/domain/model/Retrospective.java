@@ -10,6 +10,7 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 @Data
@@ -29,5 +30,7 @@ public class Retrospective {
     @NotEmpty
     private final List<String> participants;
 
+    @NotNull
+    @Size(max = 0)
     private final List<FeedbackItem> feedbackItems;
 }
