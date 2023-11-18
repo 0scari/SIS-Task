@@ -98,7 +98,7 @@ public class RetroControllerTest {
     }
 
     @Test
-    public void testPutFeedback201() throws Exception {
+    public void testPutFeedback200() throws Exception {
         Retrospective retro = RetroMockDataFactory.getDefaultRetro();
         FeedbackItem feedback = RetroMockDataFactory.getBarFeedback();
         FeedbackItem updatedFeedback = FeedbackItem.builder()
