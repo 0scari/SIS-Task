@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Optional;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -94,5 +95,28 @@ public class RetroControllerTest {
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(feedbackItem)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testPutFeedback201() throws Exception {
+        Retrospective retro = RetroMockDataFactory.getDefaultRetro();
+        FeedbackItem feedback = RetroMockDataFactory.getBarFeedback();
+        FeedbackItem updatedFeedback = FeedbackItem.builder()
+                .participantName(feedback.getParticipantName())
+                .body("ABCDEF")
+                .type(feedback.getType())
+                .build();
+
+        when(service.loadRetro(retro.getName())).thenReturn(Optional.of(retro));
+        when(service.loadFeedback(retro, feedback.getParticipantName())).thenReturn(Optional.of(feedback));
+
+        mockMvc.perform(MockMvcRequestBuilders.put(FEEDBACK_URL)
+                        .param("retroName", retro.getName())
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(updatedFeedback)))
+                .andExpect(status().isOk());
+
+        verify(service).updateFeedback(retro, feedback, updatedFeedback);
+
     }
 }
