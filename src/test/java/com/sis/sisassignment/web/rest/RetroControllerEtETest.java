@@ -15,15 +15,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(RetroController.class)
 @AutoConfigureMockMvc
-public class RetroControllerTest {
+public class RetroControllerEtETest {
 
     private final String URL = "/api/retro/";
 
@@ -40,8 +39,6 @@ public class RetroControllerTest {
     public void testBadRequest400() throws Exception {
         Retrospective retro = new Retrospective();
 
-        doNothing().when(service).save(any());
-
         mockMvc.perform(MockMvcRequestBuilders.post(URL)
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(retro)))
@@ -51,8 +48,6 @@ public class RetroControllerTest {
     @Test
     public void testPost201() throws Exception {
         Retrospective retro = RetroMockDataFactory.getDefaultRetro();
-
-        doNothing().when(service).save(any(Retrospective.class));
 
         mockMvc.perform(MockMvcRequestBuilders.post(URL)
                         .contentType(APPLICATION_JSON_VALUE)
@@ -69,7 +64,8 @@ public class RetroControllerTest {
                         .param("retroName", retroName)
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(feedbackItem)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Retrospective [Retrospective 123] does not exist"));
     }
 
     @Test

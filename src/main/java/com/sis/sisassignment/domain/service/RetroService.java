@@ -14,4 +14,8 @@ public class RetroService {
     public void save(Retrospective retro) {
         repo.create(retro);
     }
+
+    public boolean doesRetroExist(String retroName) {
+        return repo.read(retroName).isPresent();
+    }
 }
