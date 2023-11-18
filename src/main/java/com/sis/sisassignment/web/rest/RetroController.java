@@ -1,30 +1,27 @@
 package com.sis.sisassignment.web.rest;
 
 import com.sis.sisassignment.domain.model.Retrospective;
-import com.sis.sisassignment.persistence.repository.RetroRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import com.sis.sisassignment.domain.service.RetroService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.time.Instant;
-import java.util.List;
 
 @RestController
-@RequestMapping("/retro")
+@RequestMapping("/api/retro")
+@RequiredArgsConstructor
 public class RetroController {
 
-    @Autowired
-    private RetroRepository repository;
-
-    @GetMapping("/")
-    public List<Retrospective> get() {
-        return this.repository.readAll();
-    }
+    private final RetroService retroService;
 
     @PostMapping("/")
-    public String post(@RequestBody @Valid Retrospective retro) {
-        this.repository.create(retro);
-        Instant.now();
-        return "Created";
+    public ResponseEntity<Void> post(@RequestBody @Valid Retrospective retro) {
+        this.retroService.save(retro);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

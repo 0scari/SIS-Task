@@ -1,5 +1,6 @@
 package com.sis.sisassignment.domain.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true)
+@Builder
 public class Retrospective {
     @NotBlank
     private final String name;
