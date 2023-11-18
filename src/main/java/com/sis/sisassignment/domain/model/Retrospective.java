@@ -15,8 +15,17 @@ import javax.validation.constraints.NotNull;
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true)
 public class Retrospective {
-    @NotNull
     @NotBlank
     private final String name;
 
+    private final String summary;
+
+    @NotNull
+    private final Instant date;
+
+    @NotNull
+    @NotEmpty
+    private final List<String> participants;
+
+    private final List<FeedbackItem> feedbackItems;
 }
