@@ -16,7 +16,11 @@ public class RetroRepository {
         this.STORAGE.put(retro.getName(), retro);
     }
 
-    public Optional<Retrospective> read(String retroName) {
-        return Optional.ofNullable(this.STORAGE.get(retroName));
+    public Retrospective read(String retroName) {
+        return this.STORAGE.get(retroName);
+    }
+
+    public void update(Retrospective retro) {
+        this.STORAGE.put(retro.getName(), retro);
     }
 }

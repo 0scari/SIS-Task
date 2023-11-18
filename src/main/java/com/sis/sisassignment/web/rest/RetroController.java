@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import java.util.Optional;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -30,12 +32,16 @@ public class RetroController {
     }
 
     @PostMapping(value = "/feedback", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> postFeedback(@RequestBody @Valid FeedbackItem retro, @RequestParam String retroName) {
-        if (!this.retroService.doesRetroExist(retroName)) {
+    public ResponseEntity<String> postFeedback(@RequestBody @Valid FeedbackItem feedback, @RequestParam String retroName) {
+
+        Optional<Retrospective> retro = this.retroService.loadRetro(retroName);
+        if (!retro.isPresent()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(String.format("Retrospective [%s] does not exist", retroName));
         }
+
+        this.retroService.addFeedback(retro.get(), feedback);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

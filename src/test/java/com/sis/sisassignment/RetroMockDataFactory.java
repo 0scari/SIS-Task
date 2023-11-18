@@ -5,6 +5,7 @@ import com.sis.sisassignment.domain.model.FeedbackType;
 import com.sis.sisassignment.domain.model.Retrospective;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -17,7 +18,7 @@ public class RetroMockDataFactory {
                 .summary("lorem ipsum...")
                 .participants(Arrays.asList("foo", "bar"))
                 .feedbackItems(
-                    Collections.emptyList()
+                    new ArrayList<>()
                 )
                 .build();
     }

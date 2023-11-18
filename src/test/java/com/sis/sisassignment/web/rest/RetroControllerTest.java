@@ -15,6 +15,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Optional;
+
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,9 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(RetroController.class)
 @AutoConfigureMockMvc
-public class RetroControllerEtETest {
+public class RetroControllerTest {
 
-    private final String URL = "/api/retro/";
+    private final String RETRO_URL = "/api/retro/";
+    private final String FEEDBACK_URL = RETRO_URL + "feedback";
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,7 +43,7 @@ public class RetroControllerEtETest {
     public void testBadRequest400() throws Exception {
         Retrospective retro = new Retrospective();
 
-        mockMvc.perform(MockMvcRequestBuilders.post(URL)
+        mockMvc.perform(MockMvcRequestBuilders.post(RETRO_URL)
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(retro)))
                 .andExpect(status().isBadRequest());
@@ -49,18 +53,32 @@ public class RetroControllerEtETest {
     public void testPost201() throws Exception {
         Retrospective retro = RetroMockDataFactory.getDefaultRetro();
 
-        mockMvc.perform(MockMvcRequestBuilders.post(URL)
+        mockMvc.perform(MockMvcRequestBuilders.post(RETRO_URL)
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(retro)))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    public void testPostFeedback() throws Exception {
+    public void testPostFeedback201() throws Exception {
+        Retrospective retro = RetroMockDataFactory.getDefaultRetro();
+        FeedbackItem feedbackItem = RetroMockDataFactory.getBarFeedback();
+
+        when(service.loadRetro(retro.getName())).thenReturn(Optional.of(retro));
+
+        mockMvc.perform(MockMvcRequestBuilders.post(FEEDBACK_URL)
+                        .param("retroName", retro.getName())
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(feedbackItem)))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testPostFeedback404() throws Exception {
         FeedbackItem feedbackItem = RetroMockDataFactory.getBarFeedback();
         String retroName = "Retrospective 123";
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/retro/feedback")
+        mockMvc.perform(MockMvcRequestBuilders.post(FEEDBACK_URL)
                         .param("retroName", retroName)
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(feedbackItem)))
@@ -72,7 +90,7 @@ public class RetroControllerEtETest {
     public void testPostFeedback400WithoutRetroName() throws Exception {
         FeedbackItem feedbackItem = RetroMockDataFactory.getBarFeedback();
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/retro/feedback")
+        mockMvc.perform(MockMvcRequestBuilders.post(FEEDBACK_URL)
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(feedbackItem)))
                 .andExpect(status().isBadRequest());
