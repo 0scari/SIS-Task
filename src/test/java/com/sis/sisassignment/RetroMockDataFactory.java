@@ -23,6 +23,18 @@ public class RetroMockDataFactory {
                 .build();
     }
 
+    public static Retrospective getDefaultRetro(String name) {
+        return Retrospective.builder()
+                .name(name)
+                .date(Instant.now())
+                .summary("lorem ipsum...")
+                .participants(Arrays.asList("foo", "bar"))
+                .feedbackItems(
+                        new ArrayList<>()
+                )
+                .build();
+    }
+
     public static FeedbackItem getFooFeedback() {
         return FeedbackItem.builder()
                 .participantName("foo")

@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
@@ -23,6 +24,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Tests are intended to be demonstrative rather than exhaustive.
+ */
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(RetroController.class)
 @AutoConfigureMockMvc
@@ -39,6 +43,22 @@ public class RetroControllerTest {
 
     @MockBean
     private RetroService service;
+
+    @Test
+    void testGet() throws Exception {
+        Integer page = 2;
+        Integer pageSize = 1;
+        Retrospective expectedRetro = RetroMockDataFactory.getDefaultRetro("R1");
+
+        when(service.loadRetros(page, pageSize)).thenReturn(Collections.singletonList(expectedRetro));
+
+        mockMvc.perform(MockMvcRequestBuilders.get(RETRO_URL)
+                        .param("currentPage", page.toString())
+                        .param("pageSize", pageSize.toString())
+                        .accept(APPLICATION_JSON_VALUE))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(objectMapper.writeValueAsString(Collections.singletonList(expectedRetro))));
+    }
 
     @Test
     public void testBadRequest400() throws Exception {

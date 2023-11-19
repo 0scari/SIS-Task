@@ -6,8 +6,7 @@ import com.sis.sisassignment.persistence.repository.RetroRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +24,14 @@ public class RetroService {
         return Optional.ofNullable(repo.read(retroName));
     }
 
+    public List<Retrospective> loadRetros(int currentPage, int pageSize) {
+        return this.repo.readAll(calcPaginationOffset(currentPage, pageSize), pageSize);
+    }
+
+    public List<Retrospective> loadRetros(int currentPage, int pageSize, Instant date) {
+        return this.repo.readAll(calcPaginationOffset(currentPage, pageSize), pageSize, date);
+    }
+
     public void addFeedback(Retrospective retro, FeedbackItem feedback) {
         retro.getFeedbackItems().add(feedback);
         repo.update(retro);
@@ -40,5 +47,9 @@ public class RetroService {
         return retro.getFeedbackItems().stream()
                 .filter(f -> f.getParticipantName().equals(participantName))
                 .findFirst();
+    }
+
+    private int calcPaginationOffset(int currentPage, int pageSize) {
+        return (currentPage - 1) * pageSize;
     }
 }
