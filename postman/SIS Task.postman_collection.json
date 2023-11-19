@@ -1,0 +1,204 @@
+{
+	"info": {
+		"_postman_id": "2205889b-0316-46c7-90ab-6c3dd8ae825f",
+		"name": "SIS Task",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Retrospective",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"2\",\n    \"date\": \"2023-11-17T18:09:06.435072Z\",\n    \"summary\": \"a\",\n    \"participants\": [\"foo\", \"bar\"],\n    \"feedbackItems\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/retro/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"retro",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrospective",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/api/retro/?currentPage=2&pageSize=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"retro",
+						""
+					],
+					"query": [
+						{
+							"key": "currentPage",
+							"value": "2"
+						},
+						{
+							"key": "pageSize",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrospective by Date",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/api/retro/by-date/?currentPage=1&pageSize=10&date=2023-11-18",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"retro",
+						"by-date",
+						""
+					],
+					"query": [
+						{
+							"key": "currentPage",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "10"
+						},
+						{
+							"key": "date",
+							"value": "2023-11-18"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Feedback",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"participantName\": \"bar\",\n        \"body\": \"Lorem ipsum....\",\n        \"type\": \"NEGATIVE\"\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/retro/feedback?retroName=asda",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"retro",
+						"feedback"
+					],
+					"query": [
+						{
+							"key": "retroName",
+							"value": "asda"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Feedback",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"participantName\": \"bar\",\n        \"body\": \"Lorem ipsum....\",\n        \"type\": \"POSITIVE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/retro/feedback?retroName=asda",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"retro",
+						"feedback"
+					],
+					"query": [
+						{
+							"key": "retroName",
+							"value": "asda"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
