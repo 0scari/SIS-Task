@@ -2,6 +2,7 @@ package com.sis.sisassignment.persistence.repository;
 
 
 import com.sis.sisassignment.domain.model.Retrospective;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
@@ -17,16 +18,20 @@ import java.util.stream.Collectors;
  * Notes:
  *   1. It would be a good idea to return cloned Retrospectives from the read methods
  */
+@Slf4j
 @Repository
 public class RetroRepository {
     private final Map<String, Retrospective> STORAGE = new HashMap<>();
 
     public void create(Retrospective retro) {
         this.STORAGE.put(retro.getName(), retro);
+        log.debug("Retrospective was persisted {}", retro);
     }
 
     public Retrospective read(String retroName) {
-        return this.STORAGE.get(retroName);
+        Retrospective retro = this.STORAGE.get(retroName);
+        log.debug("Retrospective was read {}", retro);
+        return retro;
     }
 
     public List<Retrospective> readAll(int offset, int length) {

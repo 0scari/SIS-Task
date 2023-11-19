@@ -25,6 +25,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RequestException.class)
     public ResponseEntity<String> handleExceptions(RequestException exception) {
+        log.error("Request error encountered", exception);
         return ResponseEntity
                 .status(exception.getCode())
                 .body(exception.getMessage());
